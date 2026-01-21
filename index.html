@@ -180,7 +180,7 @@
         }
 
         function init() {
-            const saved = localStorage.getItem('acnh_bingo_final_vGithub');
+            const saved = localStorage.getItem('acnh_bingo_final_vInternalOnly');
             if (saved) { state = JSON.parse(saved); renderAll(); } 
             else { generateNewGrid(); }
             const datalist = document.getElementById('villagerNames');
@@ -189,7 +189,7 @@
             });
         }
 
-        function save() { localStorage.setItem('acnh_bingo_final_vGithub', JSON.stringify(state)); }
+        function save() { localStorage.setItem('acnh_bingo_final_vInternalOnly', JSON.stringify(state)); }
 
         const input = document.getElementById('excludeInput');
         input.addEventListener('keypress', (e) => {
@@ -234,14 +234,14 @@
                 if (cell.isFree) {
                     card.innerHTML = `<div class="free-space-text">FREE<br>SPACE</div>`;
                 } else {
-                    // This assumes folders are in the same directory as index.html
+                    // DIRECT PATH: /Villagers/VillagerName/Photo Image.png
+                    // We must encode the villager folder name and the filename
                     const folderName = encodeURIComponent(cell.name);
                     const fileName = encodeURIComponent("Photo Image.png");
-                    const imgSrc = `${folderName}/${fileName}`;
+                    const imgSrc = `Villagers/${folderName}/${fileName}`;
 
                     card.innerHTML = `
-                        <img class="villager-img" src="${imgSrc}" 
-                             onerror="this.src='https://dodo.ac/np/images/thumb/a/af/NH_Villager_Icon_List.png/100px-NH_Villager_Icon_List.png'">
+                        <img class="villager-img" src="${imgSrc}">
                         <div class="villager-name">${cell.name}</div>
                     `;
                 }
