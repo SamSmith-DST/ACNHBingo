@@ -50,13 +50,12 @@
         }
 
         .villager-img { 
-            height: 60%; width: auto; object-fit: contain; 
+            height: 65%; width: auto; object-fit: contain; 
             pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
         }
 
         .villager-name { font-weight: bold; font-size: clamp(0.6rem, 1.8vh, 1.1rem); margin-top: 4px; }
         
-        /* Fixed Free Space Styling */
         .free-space { 
             background-color: rgba(200, 200, 200, 0.8); 
             border: 3px dashed #888;
@@ -68,9 +67,8 @@
             color: white;
         }
         .free-space-text {
-            font-size: clamp(0.8rem, 2vh, 1.5rem);
+            font-size: clamp(0.8rem, 2.5vh, 1.5rem);
             font-weight: 900;
-            line-height: 1.2;
         }
         
         .sidebar { width: 260px; height: 100%; display: flex; flex-direction: column; flex-shrink: 0; }
@@ -182,7 +180,7 @@
         }
 
         function init() {
-            const saved = localStorage.getItem('acnh_bingo_final_v30');
+            const saved = localStorage.getItem('acnh_bingo_final_vGithub');
             if (saved) { state = JSON.parse(saved); renderAll(); } 
             else { generateNewGrid(); }
             const datalist = document.getElementById('villagerNames');
@@ -191,7 +189,7 @@
             });
         }
 
-        function save() { localStorage.setItem('acnh_bingo_final_v30', JSON.stringify(state)); }
+        function save() { localStorage.setItem('acnh_bingo_final_vGithub', JSON.stringify(state)); }
 
         const input = document.getElementById('excludeInput');
         input.addEventListener('keypress', (e) => {
@@ -236,7 +234,11 @@
                 if (cell.isFree) {
                     card.innerHTML = `<div class="free-space-text">FREE<br>SPACE</div>`;
                 } else {
-                    const imgSrc = `https://acnhcdn.com/latest/NpcIcon/${cell.name.replace(/\s+/g, '')}.png`;
+                    // This assumes folders are in the same directory as index.html
+                    const folderName = encodeURIComponent(cell.name);
+                    const fileName = encodeURIComponent("Photo Image.png");
+                    const imgSrc = `${folderName}/${fileName}`;
+
                     card.innerHTML = `
                         <img class="villager-img" src="${imgSrc}" 
                              onerror="this.src='https://dodo.ac/np/images/thumb/a/af/NH_Villager_Icon_List.png/100px-NH_Villager_Icon_List.png'">
