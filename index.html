@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACNH Villager Bingo</title>
+    <title>ACNH Villager Bingo 2026</title>
     <style>
         :root {
             --card-default: rgba(240, 240, 240, 0.9);
@@ -14,11 +14,7 @@
             --panel-bg: rgba(233, 228, 208, 0.95);
         }
         
-        body, html {
-            height: 100%; margin: 0; overflow: hidden; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        body, html { height: 100%; margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body {
             background-image: url('https://i.redd.it/y5mzeig307b41.png');
             background-size: cover; background-position: center; background-repeat: no-repeat;
@@ -37,10 +33,7 @@
             gap: 20px; align-items: center; justify-content: center;
         }
 
-        .grid {
-            display: grid; grid-template-columns: repeat(5, 1fr);
-            gap: 10px; height: 100%; aspect-ratio: 1 / 1;
-        }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; height: 100%; aspect-ratio: 1 / 1; }
 
         .villager-card {
             background: var(--card-default); border: 2px solid var(--border-color);
@@ -57,14 +50,21 @@
         }
 
         .villager-img { 
-            height: 65%; width: auto; object-fit: contain; 
+            height: 60%; width: auto; object-fit: contain; 
             pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
         }
 
+        /* Fallback icon style */
+        .img-placeholder {
+            font-size: 2rem;
+            background: #ddd;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
         .villager-name { font-weight: bold; font-size: clamp(0.6rem, 1.8vh, 1.1rem); margin-top: 4px; }
-
         .free-space { background-color: rgba(200, 200, 200, 0.8); border-style: dashed; }
-
         .sidebar { width: 260px; height: 100%; display: flex; flex-direction: column; flex-shrink: 0; }
 
         .exclusion-panel {
@@ -75,17 +75,8 @@
         }
 
         .exclusion-panel input { padding: 10px; border-radius: 8px; border: 1px solid #ccc; width: 100%; font-size: 1rem; }
-
-        .chip-container { 
-            display: flex; flex-direction: column; gap: 5px; margin-top: 10px;
-            overflow-y: auto; flex-grow: 1;
-        }
-
-        .chip { 
-            background: #d9534f; color: white; padding: 8px 10px; border-radius: 6px;
-            font-size: 0.9em; cursor: pointer; display: flex; justify-content: space-between;
-        }
-
+        .chip-container { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; overflow-y: auto; flex-grow: 1; }
+        .chip { background: #d9534f; color: white; padding: 8px 10px; border-radius: 6px; font-size: 0.9em; cursor: pointer; display: flex; justify-content: space-between; }
         .controls { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
         
         button { 
@@ -93,14 +84,10 @@
             font-size: 0.9rem; cursor: pointer; font-weight: bold; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        
         .btn-refresh { background-color: #4b8b6a; }
         .btn-reset { background-color: #666; }
 
-        #confetti-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 999;
-        }
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
     </style>
 </head>
 <body>
@@ -113,13 +100,12 @@
 
         <div class="sidebar">
             <div class="exclusion-panel">
-                <strong>Exclude Villagers:</strong>
-                <p style="font-size: 0.8rem; margin-top: 5px;">Type name and press Enter</p>
-                <input type="text" id="excludeInput" placeholder="e.g. Pietro" list="villagerNames">
+                <strong>Exclusions:</strong>
+                <input type="text" id="excludeInput" placeholder="Name + Enter..." list="villagerNames">
                 <datalist id="villagerNames"></datalist>
                 <div id="chipContainer" class="chip-container"></div>
                 <div class="controls">
-                    <button class="btn-refresh" onclick="confirmNewBoard()">New Random Board</button>
+                    <button class="btn-refresh" onclick="generateNewGrid()">New Board</button>
                     <button class="btn-reset" onclick="confirmFullReset()">Reset All</button>
                 </div>
             </div>
@@ -131,6 +117,7 @@
 
         let state = { excluded: [], grid: [] };
 
+        // --- Confetti Engine ---
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -179,7 +166,7 @@
         }
 
         function init() {
-            const saved = localStorage.getItem('acnh_bingo_final_v11');
+            const saved = localStorage.getItem('acnh_bingo_v12');
             if (saved) { state = JSON.parse(saved); renderAll(); } 
             else { generateNewGrid(); }
             const datalist = document.getElementById('villagerNames');
@@ -188,7 +175,7 @@
             });
         }
 
-        function save() { localStorage.setItem('acnh_bingo_final_v11', JSON.stringify(state)); }
+        function save() { localStorage.setItem('acnh_bingo_v12', JSON.stringify(state)); }
 
         const input = document.getElementById('excludeInput');
         input.addEventListener('keypress', (e) => {
@@ -230,13 +217,19 @@
                 if (cell.isFree) card.classList.add('free-space');
                 if (cell.marked) card.classList.add('marked');
 
-                // Reliable Nookipedia URL pattern
-                const wikiName = cell.name.replace(/\s+/g, '_');
+                // NEW 2026 BULLETPROOF IMAGE LOGIC
+                // Uses a direct raw image host and a fallback to a character-specific icon
+                const cleanName = cell.name.replace(/\s+/g, '');
                 const imgSrc = cell.isFree ? 
                     "https://www.animal-crossing.com/new-horizons/assets/img/global/logos/logo-acnh-en.png" : 
-                    `https://nookipedia.com/w/images/thumb/a/af/${wikiName}_NH.png/150px-${wikiName}_NH.png`;
+                    `https://raw.githubusercontent.com/alexislours/translation-sheet-data/master/icons/villagers/${cell.name}.png`;
 
-                card.innerHTML = `<img class="villager-img" src="${imgSrc}" onerror="this.src='https://dodo.ac/np/images/thumb/a/af/NH_Villager_Icon_List.png/100px-NH_Villager_Icon_List.png'"><div class="villager-name">${cell.name}</div>`;
+                card.innerHTML = `
+                    <img class="villager-img" src="${imgSrc}" 
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="img-placeholder" style="display:none;">🍃</div>
+                    <div class="villager-name">${cell.name}</div>
+                `;
 
                 card.onclick = (e) => {
                     const previouslyMarked = cell.marked;
@@ -256,8 +249,7 @@
             });
         }
 
-        function confirmNewBoard() { if (confirm("Start a new random grid?")) generateNewGrid(); }
-        function confirmFullReset() { if (confirm("Reset everything, including exclusions?")) { state.excluded = []; generateNewGrid(); } }
+        function confirmFullReset() { if (confirm("Full Reset?")) { state.excluded = []; generateNewGrid(); } }
         init();
     </script>
 </body>
