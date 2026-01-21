@@ -54,12 +54,9 @@
             pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
         }
 
-        .img-placeholder { font-size: 2rem; }
-
         .villager-name { font-weight: bold; font-size: clamp(0.6rem, 1.8vh, 1.1rem); margin-top: 4px; }
         .free-space { background-color: rgba(200, 200, 200, 0.8); border-style: dashed; }
         
-        /* Fixed Sidebar & Input Sizing */
         .sidebar { width: 260px; height: 100%; display: flex; flex-direction: column; flex-shrink: 0; }
 
         .exclusion-panel {
@@ -71,7 +68,7 @@
 
         .exclusion-panel input { 
             padding: 10px; border-radius: 8px; border: 2px solid #555; 
-            width: 100%; font-size: 1rem; box-sizing: border-box; /* Fix for overflow */
+            width: 100%; font-size: 1rem; box-sizing: border-box;
             margin-bottom: 10px;
         }
 
@@ -80,7 +77,6 @@
             background: #d9534f; color: white; padding: 10px; border-radius: 8px; 
             font-size: 0.9em; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
         }
-        .chip:hover { filter: brightness(1.1); }
 
         .controls { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
         
@@ -118,8 +114,7 @@
     </div>
 
     <script>
-        // List of all ACNH Villagers
-        const allVillagers = ["Ace", "Admiral", "Agent S", "Agnes", "Al", "Alfonso", "Alice", "Alli", "Amelia", "Anabelle", "Anchovy", "Angus", "Anicotti", "Ankha", "Annalisa", "Annalise", "Antonio", "Apollo", "Apple", "Astrid", "Audie", "Aurora", "Ava", "Avery", "Axel", "Azalea", "Baabara", "Bam", "Bangle", "Barold", "Bea", "Beardo", "Beau", "Becky", "Bella", "Benedict", "Benjamin", "Bertha", "Bettina", "Bianca", "Biff", "Big Top", "Bill", "Billy", "Biskit", "Bitty", "Blaire", "Blanche", "Bluebear", "Bob", "Bonbon", "Bones", "Boomer", "Boone", "Boots", "Boris", "Boyd", "Bree", "Broccolo", "Broffina", "Bruce", "Bubbles", "Buck", "Bud", "Bunnie", "Butch", "Buzz", "Cally", "Camofrog", "Canberra", "Candi", "Carmen", "Caroline", "Carrie", "Cashmere", "Celia", "Cephalobot", "Cesar", "Chadder", "Chai", "Charlise", "Cheri", "Cherry", "Chevre", "Chief", "Chops", "Chow", "Chrissy", "Claude", "Claudia", "Clay", "Cleo", "Clyde", "Coach", "Cobb", "Coco", "Cole", "Colton", "Cookie", "Cousteau", "Crackle", "Croque", "Cube", "Curlos", "Curly", "Curt", "Cyd", "Cyrano", "Daisy", "Deena", "Deirdre", "Deli", "Derwin", "Diana", "Diva", "Dizzy", "Dobie", "Doc", "Dom", "Dora", "Dotty", "Drago", "Drake", "Drift", "Ed", "Egbert", "Elise", "Ellie", "Eloise", "Elvis", "Erik", "Etoile", "Eugene", "Eunice", "Faith", "Fang", "Fauna", "Felicity", "Filbert", "Fillip", "Finley", "Flick", "Flora", "Flurry", "Francine", "Frank", "Freckles", "Freya", "Friga", "Frita", "Frobert", "Fuchsia", "Gabi", "Gala", "Gaston", "Gayle", "Genji", "Gigi", "Gladys", "Gloria", "Goldie", "Gonzo", "Goose", "Graham", "Greta", "Grizzly", "Groucho", "Gruff", "Gwen", "Hamlet", "Hamphrey", "Hans", "Harry", "Hazel", "Henry", "Hippeux", "Hopkins", "Hopper", "Hornsby", "Huck", "Hugh", "Iggly", "Ike", "Ione", "Jacob", "Jacques", "Jambette", "Jay", "Jeremiah", "Jitters", "Joey", "Judy", "Julia", "Julian", "June", "Kabuki", "Katt", "Keaton", "Ken", "Ketchup", "Kevin", "Kid Cat", "Kidd", "Kiki", "Kitt", "Kitty", "Klaus", "Knox", "Kody", "Kyle", "Leonardo", "Leopold", "Lily", "Limberg", "Lionel", "Lobo", "Lolly", "Lopez", "Louie", "Lucha", "Lucky", "Lulu", "Lyman", "Mac", "Maddie", "Maelle", "Maggie", "Mallary", "Maple", "Marcel", "Marcie", "Margie", "Marina", "Marshal", "Mary", "Mathilda", "Megan", "Melba", "Merengue", "Merry", "Midge", "Mint", "Mira", "Miranda", "Mitzi", "Moe", "Molly", "Monique", "Monty", "Moose", "Mott", "Muffy", "Murphy", "Nan", "Nana", "Naomi", "Nate", "Nibbles", "Norma", "O'Hare", "Octavian", "Olaf", "Olive", "Olivia", "Opal", "Ozzie", "Pancetti", "Pango", "Paolo", "Papi", "Pashmina", "Pate", "Patty", "Paula", "Peaches", "Peanut", "Pecan", "Peck", "Peewee", "Peggy", "Pekoe", "Penelope", "Petri", "Phoebe", "Pierce", "Pietro", "Pinky", "Piper", "Pippy", "Plucky", "Pompom", "Poppy", "Portia", "Prince", "Puck", "Puddles", "Pudge", "Punchy", "Purrl", "Queenie", "Quillson", "Quinn", "Raddle", "Rasher", "Raymond", "Renée", "Reneigh", "Rex", "Rhonda", "Ribbot", "Ricky", "Rilla", "Rizzo", "Roald", "Robin", "Rocco", "Rocket", "Rod", "Rodeo", "Rodney", "Rolf", "Rooney", "Rory", "Roscoe", "Rosie", "Rowan", "Ruby", "Rudy", "Sasha", "Sally", "Samson", "Sandy", "Savannah", "Scoot", "Shari", "Sheldon", "Shep", "Sherb", "Shino", "Simon", "Skye", "Sly", "Snake", "Snooty", "Soleil", "Sparro", "Spike", "Spork", "Sprinkle", "Sprocket", "Static", "Stella", "Sterling", "Stinky", "Stitches", "Stu", "Sydney", "Sylvana", "Sylvia", "T-Bone", "Tabby", "Tad", "Tammi", "Tammy", "Tangy", "Tank", "Tasha", "Teddy", "Tex", "Tia", "Tiansheng", "Tiffany", "Timbra", "Tipper", "Tom", "Toby", "Truffles", "Tucker", "Tutu", "Twiggy", "Tybalt", "Ursala", "Velma", "Vesta", "Vic", "Victoria", "Violet", "Vivian", "Vladimir", "Wade", "Walker", "Walt", "Wart Jr.", "Weber", "Wendy", "Whitney", "Whitlow", "Willow", "Winnie", "Wolfgang", "Yuka", "Zell", "Zucker"];
+        const allVillagers = ["Ace", "Admiral", "Agent S", "Agnes", "Al", "Alfonso", "Alice", "Alli", "Amelia", "Anabelle", "Anchovy", "Angus", "Anicotti", "Ankha", "Annalisa", "Annalise", "Antonio", "Apollo", "Apple", "Astrid", "Audie", "Aurora", "Ava", "Avery", "Axel", "Azalea", "Baabara", "Bam", "Bangle", "Barold", "Bea", "Beardo", "Beau", "Becky", "Bella", "Benedict", "Benjamin", "Bertha", "Bettina", "Bianca", "Biff", "Big Top", "Bill", "Billy", "Biskit", "Bitty", "Blaire", "Blanche", "Bluebear", "Bob", "Bonbon", "Bones", "Boomer", "Boone", "Boots", "Boris", "Boyd", "Bree", "Broccolo", "Broffina", "Bruce", "Bubbles", "Buck", "Bud", "Bunnie", "Butch", "Buzz", "Cally", "Camofrog", "Canberra", "Candi", "Carmen", "Caroline", "Caroline", "Carrie", "Cashmere", "Celia", "Cephalobot", "Cesar", "Chadder", "Chai", "Charlise", "Cheri", "Cherry", "Chevre", "Chief", "Chops", "Chow", "Chrissy", "Claude", "Claudia", "Clay", "Cleo", "Clyde", "Coach", "Cobb", "Coco", "Cole", "Colton", "Cookie", "Cousteau", "Crackle", "Croque", "Cube", "Curlos", "Curly", "Curt", "Cyd", "Cyrano", "Daisy", "Deena", "Deirdre", "Deli", "Derwin", "Diana", "Diva", "Dizzy", "Dobie", "Doc", "Dom", "Dora", "Dotty", "Drago", "Drake", "Drift", "Ed", "Egbert", "Elise", "Ellie", "Eloise", "Elvis", "Erik", "Etoile", "Eugene", "Eunice", "Faith", "Fang", "Fauna", "Felicity", "Filbert", "Fillip", "Finley", "Flick", "Flora", "Flurry", "Francine", "Frank", "Freckles", "Freya", "Friga", "Frita", "Frobert", "Fuchsia", "Gabi", "Gala", "Gaston", "Gayle", "Genji", "Gigi", "Gladys", "Gloria", "Goldie", "Gonzo", "Goose", "Graham", "Greta", "Grizzly", "Groucho", "Gruff", "Gwen", "Hamlet", "Hamphrey", "Hans", "Harry", "Hazel", "Henry", "Hippeux", "Hopkins", "Hopper", "Hornsby", "Huck", "Hugh", "Iggly", "Ike", "Ione", "Jacob", "Jacques", "Jambette", "Jay", "Jeremiah", "Jitters", "Joey", "Judy", "Julia", "Julian", "June", "Kabuki", "Katt", "Keaton", "Ken", "Ketchup", "Kevin", "Kid Cat", "Kidd", "Kiki", "Kitt", "Kitty", "Klaus", "Knox", "Kody", "Kyle", "Leonardo", "Leopold", "Lily", "Limberg", "Lionel", "Lobo", "Lolly", "Lopez", "Louie", "Lucha", "Lucky", "Lulu", "Lyman", "Mac", "Maddie", "Maelle", "Maggie", "Mallary", "Maple", "Marcel", "Marcie", "Margie", "Marina", "Marshal", "Mary", "Mathilda", "Megan", "Melba", "Merengue", "Merry", "Midge", "Mint", "Mira", "Miranda", "Mitzi", "Moe", "Molly", "Monique", "Monty", "Moose", "Mott", "Muffy", "Murphy", "Nan", "Nana", "Naomi", "Nate", "Nibbles", "Norma", "O'Hare", "Octavian", "Olaf", "Olive", "Olivia", "Opal", "Ozzie", "Pancetti", "Pango", "Paolo", "Papi", "Pashmina", "Pate", "Patty", "Paula", "Peaches", "Peanut", "Pecan", "Peck", "Peewee", "Peggy", "Pekoe", "Penelope", "Petri", "Phoebe", "Pierce", "Pietro", "Pinky", "Piper", "Pippy", "Plucky", "Pompom", "Poppy", "Portia", "Prince", "Puck", "Puddles", "Pudge", "Punchy", "Purrl", "Queenie", "Quillson", "Quinn", "Raddle", "Rasher", "Raymond", "Renée", "Reneigh", "Rex", "Rhonda", "Ribbot", "Ricky", "Rilla", "Rizzo", "Roald", "Robin", "Rocco", "Rocket", "Rod", "Rodeo", "Rodney", "Rolf", "Rooney", "Rory", "Roscoe", "Rosie", "Rowan", "Ruby", "Rudy", "Sasha", "Sally", "Samson", "Sandy", "Savannah", "Scoot", "Shari", "Sheldon", "Shep", "Sherb", "Shino", "Simon", "Skye", "Sly", "Snake", "Snooty", "Soleil", "Sparro", "Spike", "Spork", "Sprinkle", "Sprocket", "Static", "Stella", "Sterling", "Stinky", "Stitches", "Stu", "Sydney", "Sylvana", "Sylvia", "T-Bone", "Tabby", "Tad", "Tammi", "Tammy", "Tangy", "Tank", "Tasha", "Teddy", "Tex", "Tia", "Tiansheng", "Tiffany", "Timbra", "Tipper", "Tom", "Toby", "Truffles", "Tucker", "Tutu", "Twiggy", "Tybalt", "Ursala", "Velma", "Vesta", "Vic", "Victoria", "Violet", "Vivian", "Vladimir", "Wade", "Walker", "Walt", "Wart Jr.", "Weber", "Wendy", "Whitney", "Whitlow", "Willow", "Winnie", "Wolfgang", "Yuka", "Zell", "Zucker"];
 
         let state = { excluded: [], grid: [] };
 
@@ -171,7 +166,7 @@
         }
 
         function init() {
-            const saved = localStorage.getItem('acnh_bingo_fixed_v1');
+            const saved = localStorage.getItem('acnh_bingo_final_v2026');
             if (saved) { state = JSON.parse(saved); renderAll(); } 
             else { generateNewGrid(); }
             const datalist = document.getElementById('villagerNames');
@@ -180,7 +175,7 @@
             });
         }
 
-        function save() { localStorage.setItem('acnh_bingo_fixed_v1', JSON.stringify(state)); }
+        function save() { localStorage.setItem('acnh_bingo_final_v2026', JSON.stringify(state)); }
 
         const input = document.getElementById('excludeInput');
         input.addEventListener('keypress', (e) => {
@@ -222,14 +217,16 @@
                 if (cell.isFree) card.classList.add('free-space');
                 if (cell.marked) card.classList.add('marked');
 
-                // Reliable 2026 Image Logic
+                // ENHANCED IMAGE LOGIC: Try ACNHAPI.COM but fallback to Leaf if blocked
+                // Nookipedia Thumbnails usually work if accessed via their canonical naming
+                const cleanName = cell.name.replace(/\s+/g, '_');
                 const imgSrc = cell.isFree ? 
                     "https://www.animal-crossing.com/new-horizons/assets/img/global/logos/logo-acnh-en.png" : 
-                    `https://acnhcdn.com/latest/NpcIcon/${cell.name.replace(/\s+/g, '')}.png`;
+                    `https://acnhapi.com/v1/icons/${cell.name.toLowerCase().replace(/['\s\.]/g, '_').replace('agent_s', 'agents').replace('big_top', 'bigtop')}`;
 
                 card.innerHTML = `
                     <img class="villager-img" src="${imgSrc}" 
-                         onerror="this.src='https://dodo.ac/np/images/thumb/a/af/NH_Villager_Icon_List.png/100px-NH_Villager_Icon_List.png'">
+                         onerror="this.src='https://dodo.ac/np/images/thumb/a/af/NH_Villager_Icon_List.png/50px-NH_Villager_Icon_List.png'">
                     <div class="villager-name">${cell.name}</div>
                 `;
 
