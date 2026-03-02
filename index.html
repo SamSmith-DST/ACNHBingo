@@ -177,7 +177,6 @@
 
         function save() { localStorage.setItem('acnh_bingo_vFullShare', JSON.stringify(state)); }
 
-        // --- Full State Sharing Logic ---
         function copyBoardCode() {
             const dataToShare = {
                 grid: state.grid.map(cell => ({ name: cell.name, marked: cell.marked, isFree: cell.isFree })),
@@ -185,7 +184,7 @@
             };
             const encoded = btoa(JSON.stringify(dataToShare));
             navigator.clipboard.writeText(encoded).then(() => {
-                alert("Game code (grid, marks, & exclusions) copied to clipboard!");
+                alert("Game code copied to clipboard!");
             });
         }
 
@@ -217,15 +216,32 @@
             }
         });
 
+        // --- UPDATED SHUFFLE LOGIC ---
         function generateNewGrid() {
+            // 1. Get pool of villagers
             const pool = allVillagers.filter(v => !state.excluded.includes(v));
-            const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 24);
-            state.grid = []; let vIdx = 0;
-            for (let i = 0; i < 25; i++) {
-                if (i === 12) state.grid.push({ name: 'FREE SPACE', marked: true, isFree: true });
-                else { state.grid.push({ name: shuffled[vIdx], marked: false, isFree: false }); vIdx++; }
+            
+            // 2. Fisher-Yates (Fair) Shuffle
+            for (let i = pool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pool[i], pool[j]] = [pool[j], pool[i]]; // Swap elements
             }
-            save(); renderAll();
+
+            // 3. Take the first 24 for the board
+            const shuffled = pool.slice(0, 24);
+            
+            state.grid = []; 
+            let vIdx = 0;
+            for (let i = 0; i < 25; i++) {
+                if (i === 12) {
+                    state.grid.push({ name: 'FREE SPACE', marked: true, isFree: true });
+                } else { 
+                    state.grid.push({ name: shuffled[vIdx], marked: false, isFree: false }); 
+                    vIdx++; 
+                }
+            }
+            save(); 
+            renderAll();
         }
 
         function renderAll() {
